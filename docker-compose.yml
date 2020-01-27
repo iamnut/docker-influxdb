@@ -1,0 +1,38 @@
+version: "3.5"
+
+x-logging:
+  &default-logging
+    driver: "json-file"
+    options:
+      max-size: "100m"
+      max-file: "2"
+
+networks:
+  influxdb-net:
+    name: influxdb-net
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+       - subnet: ${NETWORK_IP_CIDR}
+
+services:
+  influxdb:
+    container_name: influxdb
+    image: influxdb:1.7.7-alpine
+    labels:
+      - container.monitoring.app=influxdb
+    logging: *default-logging
+    restart: always
+    environment:
+      - TZ=Asia/Bangkok
+    env_file:
+      - .influxdb.env
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb
+      - ./influxdb/ssl:/ssl:ro
+      - ./influxdb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - influxdb-net
+    ports:
+      - 8086:8086
