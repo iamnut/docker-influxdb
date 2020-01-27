@@ -13,8 +13,8 @@ networks:
     driver: bridge
     ipam:
       driver: default
-      config:
-       - subnet: ${NETWORK_IP_CIDR}
+  backbone-net:
+    name: backbone-net
 
 services:
   influxdb:
@@ -34,5 +34,4 @@ services:
       - ./influxdb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     networks:
       - influxdb-net
-    ports:
-      - 8086:8086
+      - backbone-net
