@@ -1,4 +1,4 @@
 !.gitkeep
 influxdb/data/**
-influxdb/ssl/**
+!influxdb/data/.gitkeep
 *.env
